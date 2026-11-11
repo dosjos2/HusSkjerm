@@ -1,0 +1,20 @@
+[Unit]
+Description=HusSkjerm - smarthusstatus pa e-ink
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=husskjerm
+Group=husskjerm
+SupplementaryGroups=gpio spi
+WorkingDirectory=/opt/husskjerm
+ExecStart=/opt/husskjerm/HusSkjerm
+Restart=always
+RestartSec=5
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+Environment=HUSSKJERM_Urls=http://0.0.0.0:80
+Environment=DOTNET_BUNDLE_EXTRACT_BASE_DIR=/tmp/husskjerm
+
+[Install]
+WantedBy=multi-user.target

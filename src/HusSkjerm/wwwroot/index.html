@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="nb">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HusSkjerm</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <h1>🏠 HusSkjerm</h1>
+    <div class="top-actions">
+      <span id="dirty" class="badge hidden">Ulagrede endringer</span>
+      <button id="save" class="primary">Lagre</button>
+    </div>
+  </header>
+  <nav class="tabs">
+    <button data-tab="plan" class="active">Plantegning</button>
+    <button data-tab="rotation">Rotasjon</button>
+    <button data-tab="images">Bilder</button>
+    <button data-tab="aqara">Aqara</button>
+    <button data-tab="settings">Innstillinger</button>
+    <button data-tab="preview">Skjerm nå</button>
+  </nav>
+  <div id="toast" class="toast hidden"></div>
+
+  <main>
+    <section id="tab-plan" class="tab">
+      <div class="bar">
+        <select id="floorSelect"></select>
+        <button id="addFloor">+ Etasje</button>
+        <button id="renameFloor">Gi nytt navn</button>
+        <button id="deleteFloor" class="danger">Slett etasje</button>
+        <button id="addRoom" class="primary">+ Rom</button>
+      </div>
+      <div class="editor">
+        <div class="canvas-wrap"><svg id="svg" viewBox="0 0 800 440" preserveAspectRatio="xMidYMid meet"></svg></div>
+        <aside id="roomPanel" class="card"></aside>
+      </div>
+    </section>
+
+    <section id="tab-rotation" class="tab hidden">
+      <div class="card">
+        <h2>Visningstid</h2>
+        <label>Sekunder per bilde <input type="number" id="rotationSeconds" min="1" max="3600"></label>
+        <label class="check"><input type="checkbox" id="paused"> Pause rotasjonen</label>
+        <p class="warn">⚠ E-ink-skjermer med rødt tar 15–20 s på å bytte bilde. Waveshare anbefaler minst 180 s mellom oppdateringer for å skåne panelet. Verdier under ca. 30 s gir kontinuerlig flimring og slitasje.</p>
+      </div>
+      <div class="card">
+        <h2>Rekkefølge</h2>
+        <div class="bar"><button id="addWeather">+ Værvisning</button><span class="muted">Bilder legges til under «Bilder».</span></div>
+        <ul id="slideList" class="slides"></ul>
+      </div>
+    </section>
+
+    <section id="tab-images" class="tab hidden">
+      <div class="card">
+        <h2>Egne bilder</h2>
+        <p class="muted">Bildene tilpasses 800×480 og gjøres om til svart/hvitt/rødt.</p>
+        <input type="file" id="upload" accept="image/*" multiple>
+        <div id="imageGrid" class="grid"></div>
+      </div>
+    </section>
+
+    <section id="tab-aqara" class="tab hidden">
+      <div class="card">
+        <h2>Aqara-tilkobling</h2>
+        <div id="aqaraStatus" class="muted"></div>
+        <ol class="steps">
+          <li><button id="aqaraCode">1. Send kode til Aqara-kontoen</button></li>
+          <li><input id="aqaraCodeInput" placeholder="Kode fra e-post/SMS"> <button id="aqaraToken">2. Logg inn</button></li>
+          <li><button id="aqaraSync" class="primary">3. Synkroniser enheter</button></li>
+        </ol>
+        <p class="muted">AppId, KeyId, AppKey og konto settes i <code>appsettings.json</code>.</p>
+      </div>
+      <div class="card">
+        <h2>Enheter</h2>
+        <div id="deviceList"></div>
+      </div>
+    </section>
+
+    <section id="tab-settings" class="tab hidden">
+      <div class="card">
+        <h2>Vær (yr.no)</h2>
+        <label>Stedsnavn <input id="location"></label>
+        <label>Breddegrad <input type="number" step="0.0001" id="latitude"></label>
+        <label>Lengdegrad <input type="number" step="0.0001" id="longitude"></label>
+        <label>Utendørs Aqara-sensor (valgfri)<select id="outdoorSensor"></select></label>
+        <button id="refreshWeather">Hent vær nå</button>
+      </div>
+      <div class="card">
+        <h2>Temperaturvarsel</h2>
+        <p class="muted">Temperaturer utenfor grensene vises i rødt.</p>
+        <label>Lav grense (°C) <input type="number" id="alertLow"></label>
+        <label>Høy grense (°C) <input type="number" id="alertHigh"></label>
+      </div>
+      <div class="card"><h2>Status</h2><pre id="statusBox" class="status"></pre></div>
+    </section>
+
+    <section id="tab-preview" class="tab hidden">
+      <div class="card">
+        <h2>Det som vises nå</h2>
+        <img id="currentImg" class="preview" alt="Gjeldende skjermbilde">
+        <div class="bar"><button id="reloadCurrent">Oppdater</button><button id="refreshSensors">Hent sensorer nå</button></div>
+      </div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
